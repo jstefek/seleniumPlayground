@@ -8,28 +8,27 @@ import org.openqa.selenium.TimeoutException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class SimplePageLoadedCheckerTest {
+public class PageLoadedCheckerTest {
 
     private AbstractPage page;
-    private SimplePageLoadedChecker splc;
+    private PageLoadedChecker splc;
 
     @BeforeMethod
     public void setup() {
-        splc = new SimplePageLoadedChecker();
+        splc = new PageLoadedChecker();
         page = Mockito.mock(AbstractPage.class);
     }
 
     @Test
-    public void testWaitForPageToLoad_invokesPageWaitMethod() {
-        splc.waitForPageToLoad(page);
+    public void testCheckPage_invokesPageWaitMethod() {
+        splc.checkPage(page);
         verify(page).waitForLoad();
     }
 
     @Test(expectedExceptions = {TimeoutException.class})
-    public void testWaitForPageToLoad_waitMethodTimeouts_exceptionGoesThrough() {
+    public void testCheckPage_waitMethodTimeouts_exceptionGoesThrough() {
         Mockito.doThrow(new TimeoutException()).when(page).waitForLoad();
-
-        splc.waitForPageToLoad(page);
+        splc.checkPage(page);
     }
 
 }

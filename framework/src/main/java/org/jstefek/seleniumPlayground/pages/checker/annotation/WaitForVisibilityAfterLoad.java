@@ -1,4 +1,4 @@
-package org.jstefek.seleniumPlayground.pages.checker;
+package org.jstefek.seleniumPlayground.pages.checker.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

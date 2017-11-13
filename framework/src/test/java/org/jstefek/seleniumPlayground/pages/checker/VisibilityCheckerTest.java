@@ -14,15 +14,15 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class VisibilityCheckingPageLoadedCheckerTest {
+public class VisibilityCheckerTest {
 
     private AbstractPage page;
-    private VisibilityCheckingPageLoadedChecker pageLoader;
+    private VisibilityChecker pageLoader;
     private FluentWait<WebDriver> wait;
 
     @BeforeMethod
     public void setup() {
-        pageLoader = new VisibilityCheckingPageLoadedChecker();
+        pageLoader = new VisibilityChecker();
         page = Mockito.mock(AbstractPage.class);
         wait = Mockito.mock(FluentWait.class);
         when(page.createWait()).thenReturn(wait);
@@ -31,21 +31,15 @@ public class VisibilityCheckingPageLoadedCheckerTest {
     }
 
     @Test
-    public void testWaitForPageToLoad_invokesCreateWait() {
-        pageLoader.waitForPageToLoad(page);
+    public void testCheckPage_invokesCreateWait() {
+        pageLoader.checkPage(page);
         verify(page, times(1)).createWait();
     }
 
-    @Test
-    public void testWaitForPageToLoad_invokesWaitMethod() {
-        pageLoader.waitForPageToLoad(page);
-        verify(page, times(1)).waitForLoad();
-    }
-
     @Test(expectedExceptions = {TimeoutException.class})
-    public void testWaitForPageToLoad_waitMethodTimeouts_exceptionGoesThrough() {
+    public void testCheckPage_waitMethodTimeouts_exceptionGoesThrough() {
         when(wait.until(any())).thenThrow(new TimeoutException(""));
-        pageLoader.waitForPageToLoad(page);
+        pageLoader.checkPage(page);
     }
 
 }

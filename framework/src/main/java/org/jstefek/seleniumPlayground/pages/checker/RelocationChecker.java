@@ -3,18 +3,20 @@ package org.jstefek.seleniumPlayground.pages.checker;
 import java.util.ArrayList;
 import java.util.List;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
+import org.jstefek.seleniumPlayground.pages.checker.annotation.PageLocation;
 import org.jstefek.seleniumPlayground.pages.utils.StringUtils;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
- * AAnnotationBasedRelocationChecker scans given page object's class for {@link PageLocation PageLocation} annotation, from
- * which it creates conditions to be checked (all non null nor empty values) and then waits for all of them to be met.
+ * Scans given page object's class for {@link org.jstefek.seleniumPlayground.pages.checker.annotation.PageLocation PageLocation}
+ * annotation, from which it creates conditions to be checked (all non null nor empty values) and then waits for all of them to
+ * be met.
  */
-public class AnnotationBasedRelocationChecker implements PageRelocationChecker {
+public class RelocationChecker implements PageChecker {
 
     @Override
-    public <T extends AbstractPage> void checkPageRelocated(T page) {
+    public <T extends AbstractPage> void checkPage(T page) {
         PageLocation location = page.getClass().getAnnotation(PageLocation.class);
         if (location != null) {
             page.createWait().until(ExpectedConditions.and(getConditions(location)));

@@ -1,8 +1,8 @@
 package org.jstefek.seleniumPlayground.integration.tests.page.tmobile;
 
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
-import org.jstefek.seleniumPlayground.pages.checker.PageLocation;
-import org.jstefek.seleniumPlayground.pages.checker.WaitForVisibilityAfterLoad;
+import org.jstefek.seleniumPlayground.pages.checker.annotation.PageLocation;
+import org.jstefek.seleniumPlayground.pages.checker.annotation.WaitForVisibilityAfterLoad;
 import org.jstefek.seleniumPlayground.pages.factory.PageFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

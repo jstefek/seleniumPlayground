@@ -1,5 +1,6 @@
 package org.jstefek.seleniumPlayground.pages.checker;
 
+import org.jstefek.seleniumPlayground.pages.checker.annotation.WaitForVisibilityAfterLoad;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
@@ -8,15 +9,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
- * Extended behaviour of {@link SimplePageLoadedChecker SimplePageLoadedChecker}, after the default check provided in
- * {@link SimplePageLoadedChecker SimplePageLoadedChecker} it checks all page object's fields marked with
- * {@link WaitForVisibilityAfterLoad WaitForVisibilityAfterLoad} to be visible.
+ * Checks all page object's fields marked with {@link WaitForVisibilityAfterLoad WaitForVisibilityAfterLoad} to be visible.
  */
-public class VisibilityCheckingPageLoadedChecker extends SimplePageLoadedChecker {
+public class VisibilityChecker implements PageChecker {
 
     @Override
-    public <T extends AbstractPage> void waitForPageToLoad(T page) {
-        super.waitForPageToLoad(page);
+    public <T extends AbstractPage> void checkPage(T page) {
         final List<WebElement> elements = ReflectionUtils.getFieldsWithAnnotationAndOfType(page, WaitForVisibilityAfterLoad.class, WebElement.class)
                 .stream()
                 .map(f -> ReflectionUtils.getTypedFieldValue(f, page, WebElement.class))

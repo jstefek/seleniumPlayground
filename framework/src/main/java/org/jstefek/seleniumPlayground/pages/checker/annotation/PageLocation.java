@@ -1,4 +1,4 @@
-package org.jstefek.seleniumPlayground.pages.checker;
+package org.jstefek.seleniumPlayground.pages.checker.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Marker annotation for a Page object class to be checked after the page is loaded. Used by
- * {@link AnnotationBasedRelocationChecker AnnotationBasedRelocationChecker}.
+ * {@link org.jstefek.seleniumPlayground.pages.checker.RelocationChecker RelocationChecker}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

@@ -2,14 +2,13 @@ package org.jstefek.seleniumPlayground.pages.checker;
 
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
 
-public interface PageLoadedChecker {
+/**
+ * Wait until page is loaded using default page's method {@link AbstractPage#waitForLoad() AbstractPage#waitForLoad()}
+ */
+public class PageLoadedChecker implements PageChecker {
 
-    /**
-     * Waits for page to load.
-     *
-     * @param <T> type of page
-     * @param page instance of page
-     */
-    <T extends AbstractPage> void waitForPageToLoad(T page);
-
+    @Override
+    public <T extends AbstractPage> void checkPage(T page) {
+        page.waitForLoad();
+    }
 }
