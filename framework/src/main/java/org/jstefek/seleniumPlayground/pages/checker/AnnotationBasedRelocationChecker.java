@@ -1,0 +1,52 @@
+package org.jstefek.seleniumPlayground.pages.checker;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.jstefek.seleniumPlayground.pages.AbstractPage;
+import org.jstefek.seleniumPlayground.pages.utils.StringUtils;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+/**
+ * AAnnotationBasedRelocationChecker scans given page object's class for {@link PageLocation PageLocation} annotation, from
+ * which it creates conditions to be checked (all non null nor empty values) and then waits for all of them to be met.
+ */
+public class AnnotationBasedRelocationChecker implements PageRelocationChecker {
+
+    @Override
+    public <T extends AbstractPage> void checkPageRelocated(T page) {
+        PageLocation location = page.getClass().getAnnotation(PageLocation.class);
+        if (location != null) {
+            page.createWait().until(ExpectedConditions.and(getConditions(location)));
+        }
+    }
+
+    private ExpectedCondition<Boolean>[] getConditions(final PageLocation location) {
+        List<ExpectedCondition<Boolean>> result = new ArrayList<>();
+        String value;
+        value = location.titleToBe();
+        if (StringUtils.isNotNullNorEmpty(value)) {
+            result.add(ExpectedConditions.titleIs(value));
+        }
+        value = location.titleToContain();
+        if (StringUtils.isNotNullNorEmpty(value)) {
+            result.add(ExpectedConditions.titleContains(value));
+        }
+        if (StringUtils.isNotNullNorEmpty(location.titleToMatch())) {
+            result.add(d -> d.getTitle().matches(location.titleToMatch()));
+        }
+        value = location.urlToBe();
+        if (StringUtils.isNotNullNorEmpty(value)) {
+            result.add(ExpectedConditions.urlToBe(value));
+        }
+        value = location.urlToContain();
+        if (StringUtils.isNotNullNorEmpty(value)) {
+            result.add(ExpectedConditions.urlContains(value));
+        }
+        value = location.urlToMatch();
+        if (StringUtils.isNotNullNorEmpty(value)) {
+            result.add(ExpectedConditions.urlMatches(value));
+        }
+        return result.toArray(new ExpectedCondition[result.size()]);
+    }
+}

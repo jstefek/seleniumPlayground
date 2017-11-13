@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
 import org.jstefek.seleniumPlayground.pages.checker.PageLoadedChecker;
+import org.jstefek.seleniumPlayground.pages.checker.PageRelocationChecker;
 import org.jstefek.seleniumPlayground.pages.instanciator.PageInstanciator;
 import org.jstefek.seleniumPlayground.pages.intialize.PageInitializer;
 import org.mockito.Mockito;
@@ -19,16 +20,18 @@ public class SimplePageFactoryTest {
         PageLoadedChecker checker = Mockito.mock(PageLoadedChecker.class);
         PageInitializer initializer = Mockito.mock(PageInitializer.class);
         PageInstanciator instanciator = Mockito.mock(PageInstanciator.class);
-        AbstractPage ap = Mockito.mock(AbstractPage.class);
+        PageRelocationChecker relocationChecker = Mockito.mock(PageRelocationChecker.class);
+        AbstractPage page = Mockito.mock(AbstractPage.class);
 
-        SimplePageFactory spf = new SimplePageFactory(checker, initializer, instanciator);
+        SimplePageFactory spf = new SimplePageFactory(initializer, instanciator, checker, relocationChecker);
 
-        when(instanciator.instantiatePage(AbstractPage.class, browser, spf)).thenReturn(ap);
+        when(instanciator.instantiatePage(AbstractPage.class, browser, spf)).thenReturn(page);
         spf.initializePage(AbstractPage.class, browser);
 
         verify(instanciator).instantiatePage(AbstractPage.class, browser, spf);
-        verify(initializer).initializePage(ap, browser);
-        verify(checker).waitForPageToLoad(ap);
+        verify(initializer).initializePage(page, browser);
+        verify(checker).waitForPageToLoad(page);
+        verify(relocationChecker).checkPageRelocated(page);
     }
 
 }

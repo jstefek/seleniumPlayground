@@ -18,7 +18,7 @@ public abstract class AbstractPage {
     private final PageFactory pageFactory;
     private final RequestGuard requestGuard;
 
-    public AbstractPage(WebDriver browser, PageFactory pageFactory) {
+    protected AbstractPage(WebDriver browser, PageFactory pageFactory) {
         this.browser = browser;
         this.pageFactory = pageFactory;
         this.requestGuard = new SimpleRequestGuard(browser);

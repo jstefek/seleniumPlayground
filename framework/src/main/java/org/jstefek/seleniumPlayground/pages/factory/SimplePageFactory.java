@@ -1,7 +1,9 @@
 package org.jstefek.seleniumPlayground.pages.factory;
 
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
+import org.jstefek.seleniumPlayground.pages.checker.AnnotationBasedRelocationChecker;
 import org.jstefek.seleniumPlayground.pages.checker.PageLoadedChecker;
+import org.jstefek.seleniumPlayground.pages.checker.PageRelocationChecker;
 import org.jstefek.seleniumPlayground.pages.checker.VisibilityCheckingPageLoadedChecker;
 import org.jstefek.seleniumPlayground.pages.instanciator.PageInstanciator;
 import org.jstefek.seleniumPlayground.pages.instanciator.SimplePageInstanciator;
@@ -14,15 +16,17 @@ public class SimplePageFactory implements PageFactory {
     private final PageInitializer pageInitializer;
     private final PageInstanciator pageInstanciator;
     private final PageLoadedChecker pageLoadedChecker;
+    private final PageRelocationChecker pageRelocationChecker;
 
     public SimplePageFactory() {
-        this(new VisibilityCheckingPageLoadedChecker(), new SimplePageInitializer(), new SimplePageInstanciator());
+        this(new SimplePageInitializer(), new SimplePageInstanciator(), new VisibilityCheckingPageLoadedChecker(), new AnnotationBasedRelocationChecker());
     }
 
-    public SimplePageFactory(PageLoadedChecker pageLoadedChecker, PageInitializer pageInitializer, PageInstanciator pageInstanciator) {
-        this.pageLoadedChecker = pageLoadedChecker;
+    SimplePageFactory(PageInitializer pageInitializer, PageInstanciator pageInstanciator, PageLoadedChecker pageLoadedChecker, PageRelocationChecker pageRelocationChecker) {
         this.pageInitializer = pageInitializer;
         this.pageInstanciator = pageInstanciator;
+        this.pageLoadedChecker = pageLoadedChecker;
+        this.pageRelocationChecker = pageRelocationChecker;
     }
 
     @Override
@@ -30,6 +34,7 @@ public class SimplePageFactory implements PageFactory {
         T page = pageInstanciator.instantiatePage(pageKlass, browser, this);
         pageInitializer.initializePage(page, browser);
         pageLoadedChecker.waitForPageToLoad(page);
+        pageRelocationChecker.checkPageRelocated(page);
         return page;
     }
 

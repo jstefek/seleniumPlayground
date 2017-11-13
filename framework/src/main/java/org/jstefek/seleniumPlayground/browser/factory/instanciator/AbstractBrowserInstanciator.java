@@ -9,14 +9,14 @@ import org.openqa.selenium.WebDriver;
 abstract class AbstractBrowserInstanciator implements BrowserInstanciator {
 
     private final Supplier<? extends WebDriver> browserSupplier;
-    private final Function<String, File> pathRoFileFunction;
+    private final Function<String, File> pathToFileFunction;
     private final String resourceName;
     private final Function<String, String> sysPropToPathFunction;
     private final String sysPropertyName;
 
-    public AbstractBrowserInstanciator(Supplier<? extends WebDriver> browserSupplier, Function<String, File> pathRoFileFunction, String resourceName, Function<String, String> sysPropToPathFunction, String sysPropertyName) {
+    AbstractBrowserInstanciator(Supplier<? extends WebDriver> browserSupplier, Function<String, File> pathToFileFunction, String resourceName, Function<String, String> sysPropToPathFunction, String sysPropertyName) {
         this.browserSupplier = browserSupplier;
-        this.pathRoFileFunction = pathRoFileFunction;
+        this.pathToFileFunction = pathToFileFunction;
         this.resourceName = resourceName;
         this.sysPropToPathFunction = sysPropToPathFunction;
         this.sysPropertyName = sysPropertyName;
@@ -33,7 +33,7 @@ abstract class AbstractBrowserInstanciator implements BrowserInstanciator {
         if (pathToDriver == null || pathToDriver.isEmpty()) {
             throw new IllegalStateException(String.format("Required system property <%s> was not set.", sysPropertyName));
         }
-        File driverFile = pathRoFileFunction.apply(pathToDriver);
+        File driverFile = pathToFileFunction.apply(pathToDriver);
         if (driverFile.exists()) {
             driverFile.setExecutable(true);
             browser = browserSupplier.get();
