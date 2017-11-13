@@ -2,6 +2,7 @@ package org.jstefek.seleniumPlayground.pages.checker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
 import org.jstefek.seleniumPlayground.pages.checker.annotation.PageLocation;
 import org.jstefek.seleniumPlayground.pages.utils.StringUtils;
@@ -15,9 +16,19 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  */
 public class RelocationChecker implements PageChecker {
 
+    private final Function<Class<? extends AbstractPage>, PageLocation> classToPageLocationFunction;
+
+    public RelocationChecker() {
+        this((c) -> c.getClass().getAnnotation(PageLocation.class));
+    }
+
+    RelocationChecker(Function<Class<? extends AbstractPage>, PageLocation> classToPageLocationFunction) {
+        this.classToPageLocationFunction = classToPageLocationFunction;
+    }
+
     @Override
     public <T extends AbstractPage> void checkPage(T page) {
-        PageLocation location = page.getClass().getAnnotation(PageLocation.class);
+        PageLocation location = classToPageLocationFunction.apply(page.getClass());
         if (location != null) {
             page.createWait().until(ExpectedConditions.and(getConditions(location)));
         }
