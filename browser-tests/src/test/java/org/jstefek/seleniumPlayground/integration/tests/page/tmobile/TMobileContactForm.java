@@ -3,12 +3,14 @@ package org.jstefek.seleniumPlayground.integration.tests.page.tmobile;
 import java.io.File;
 import org.jstefek.seleniumPlayground.integration.tests.model.Ticket;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
+import org.jstefek.seleniumPlayground.pages.checker.PageLocation;
 import org.jstefek.seleniumPlayground.pages.checker.WaitForVisibilityAfterLoad;
 import org.jstefek.seleniumPlayground.pages.factory.PageFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+@PageLocation(urlToContain = "t-mobile.cz/podpora/kontaktujte-nas", titleToContain = "Kontaktujte nás")
 public class TMobileContactForm extends AbstractPage {
 
     @WaitForVisibilityAfterLoad
