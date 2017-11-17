@@ -17,7 +17,7 @@ public class FromSystemPropertiesBrowserProvider implements BrowserProvider {
         this(new SimpleBrowserFactory(), () -> BrowserType.parseBrowser(System.getProperty(BROWSER_SYS_PROPERTY)));
     }
 
-    public FromSystemPropertiesBrowserProvider(BrowserFactory bf, Supplier<BrowserType> browserTypeSupplier) {
+    FromSystemPropertiesBrowserProvider(BrowserFactory bf, Supplier<BrowserType> browserTypeSupplier) {
         this.bf = bf;
         this.browserTypeSupplier = browserTypeSupplier;
     }
