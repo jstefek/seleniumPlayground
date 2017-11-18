@@ -5,7 +5,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.reflections.Reflections;
 
 /**
  * Reflection utilities service
@@ -26,6 +28,16 @@ class SimpleReflectionUtilsService implements ReflectionUtilsService {
     @Override
     public List<Field> getAllFields(Object instance) {
         return getAllFields(instance.getClass());
+    }
+
+    @Override
+    public <T> Set<Class<? extends T>> getAllSubTypesWithAnnotation(Class<T> ofType, Class<? extends Annotation> annotationClass) {
+        Set<Class<? extends T>> collect = new Reflections("")
+                .getSubTypesOf(ofType)
+                .stream()
+                .filter(c -> c.getAnnotation(annotationClass) != null)
+                .collect(Collectors.toSet());
+        return collect;
     }
 
     @Override
@@ -62,6 +74,23 @@ class SimpleReflectionUtilsService implements ReflectionUtilsService {
             T value = (T) f.get(instance);
             f.setAccessible(accessible);
             return value;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public <T> T instanciate(Class<T> klass, Object... args) {
+        try {
+            if (args != null && args.length > 0) {
+                Class<?>[] paramTypes = new Class<?>[args.length];
+                for (int i = 0; i < args.length; i++) {
+                    paramTypes[i] = args[i].getClass();
+                }
+                return klass.getConstructor(paramTypes).newInstance(args);
+            } else {
+                return klass.getConstructor().newInstance();
+            }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

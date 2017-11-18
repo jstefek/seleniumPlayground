@@ -3,6 +3,7 @@ package org.jstefek.seleniumPlayground.pages.utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Set;
 
 public interface ReflectionUtilsService {
 
@@ -17,6 +18,14 @@ public interface ReflectionUtilsService {
      * @return all fields from given instance up to the Object class (exclusive)
      */
     List<Field> getAllFields(Object instance);
+
+    /**
+     * @param <T> searched type
+     * @param ofType parent type
+     * @param annotationClass annotation type
+     * @return set of all classes with given annotation or an empty set
+     */
+    <T> Set<Class<? extends T>> getAllSubTypesWithAnnotation(Class<T> ofType, Class<? extends Annotation> annotationClass);
 
     /**
      * @param <T> type of fields
@@ -53,4 +62,11 @@ public interface ReflectionUtilsService {
      */
     <T> T getTypedFieldValue(Field f, Object instance, Class<T> type);
 
+    /**
+     * @param <T> type of instance
+     * @param klass class to instanciate
+     * @param args arguments for constructor
+     * @return new instance of given class or a RuntimeException
+     */
+    <T> T instanciate(Class<T> klass, Object... args);
 }

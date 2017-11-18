@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
 
 import java.util.function.Supplier;
+import org.jstefek.seleniumPlayground.browser.enhancer.BrowserEnhancer;
 import org.jstefek.seleniumPlayground.browser.factory.BrowserFactory;
 import org.mockito.Mockito;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,6 +22,8 @@ public class SimpleBrowserProviderTest {
     private ChromeDriver chromeDriver;
     private FirefoxDriver firefoxDriver;
     private SimpleBrowserProvider browserProvider;
+    private BrowserEnhancer enhancer;
+    private BrowserEnhancer[] enhancers;
 
     @BeforeMethod
     public void setup() {
@@ -28,11 +31,16 @@ public class SimpleBrowserProviderTest {
         firefoxDriver = Mockito.mock(FirefoxDriver.class);
         bf = Mockito.mock(BrowserFactory.class);
         browserTypeSupplier = Mockito.mock(Supplier.class);
-        browserProvider = new SimpleBrowserProvider(bf, browserTypeSupplier);
+        enhancer = Mockito.mock(BrowserEnhancer.class);
+        enhancers = new BrowserEnhancer[]{enhancer};
+        browserProvider = new SimpleBrowserProvider(bf, browserTypeSupplier, enhancers);
 
+        when(enhancer.enhance(firefoxDriver)).thenReturn(firefoxDriver);
+        when(enhancer.enhance(chromeDriver)).thenReturn(chromeDriver);
         when(bf.startBrowser(BrowserType.FIREFOX)).thenReturn(firefoxDriver);
         when(bf.startBrowser(BrowserType.CHROME)).thenReturn(chromeDriver);
         when(bf.startBrowser(BrowserType.UNKNOWN)).thenThrow(new UnsupportedOperationException());
+
     }
 
     @Test
