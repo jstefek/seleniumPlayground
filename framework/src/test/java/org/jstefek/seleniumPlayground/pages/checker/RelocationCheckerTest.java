@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
 import org.jstefek.seleniumPlayground.pages.checker.annotation.PageLocation;
+import org.jstefek.seleniumPlayground.pages.utils.StringUtilsService;
 import org.mockito.Mockito;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -23,6 +24,7 @@ public class RelocationCheckerTest {
     private PageLocation pageLocation;
     private FluentWait<WebDriver> wait;
     private Function<Class<? extends AbstractPage>, PageLocation> function;
+    private StringUtilsService sus;
 
     @BeforeMethod
     public void setup() {
@@ -37,7 +39,10 @@ public class RelocationCheckerTest {
         function = Mockito.mock(Function.class);
         when(function.apply(any())).thenReturn(pageLocation);
 
-        checker = new RelocationChecker(function);
+        sus = Mockito.mock(StringUtilsService.class);
+        when(sus.isNotNullNorEmpty(any())).thenReturn(Boolean.TRUE);
+
+        checker = new RelocationChecker(function, sus);
     }
 
     @Test

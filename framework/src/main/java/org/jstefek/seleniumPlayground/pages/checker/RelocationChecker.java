@@ -3,9 +3,10 @@ package org.jstefek.seleniumPlayground.pages.checker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import javax.inject.Inject;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
 import org.jstefek.seleniumPlayground.pages.checker.annotation.PageLocation;
-import org.jstefek.seleniumPlayground.pages.utils.StringUtils;
+import org.jstefek.seleniumPlayground.pages.utils.StringUtilsService;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -14,16 +15,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * annotation, from which it creates conditions to be checked (all non null nor empty values) and then waits for all of them to
  * be met.
  */
-public class RelocationChecker implements PageChecker {
+class RelocationChecker implements PageChecker {
 
     private final Function<Class<? extends AbstractPage>, PageLocation> classToPageLocationFunction;
+    private final StringUtilsService sus;
 
-    public RelocationChecker() {
-        this((c) -> c.getClass().getAnnotation(PageLocation.class));
-    }
-
-    RelocationChecker(Function<Class<? extends AbstractPage>, PageLocation> classToPageLocationFunction) {
+    @Inject
+    public RelocationChecker(Function<Class<? extends AbstractPage>, PageLocation> classToPageLocationFunction, StringUtilsService sus) {
         this.classToPageLocationFunction = classToPageLocationFunction;
+        this.sus = sus;
     }
 
     @Override
@@ -38,26 +38,26 @@ public class RelocationChecker implements PageChecker {
         List<ExpectedCondition<Boolean>> result = new ArrayList<>();
         String value;
         value = location.titleToBe();
-        if (StringUtils.isNotNullNorEmpty(value)) {
+        if (sus.isNotNullNorEmpty(value)) {
             result.add(ExpectedConditions.titleIs(value));
         }
         value = location.titleToContain();
-        if (StringUtils.isNotNullNorEmpty(value)) {
+        if (sus.isNotNullNorEmpty(value)) {
             result.add(ExpectedConditions.titleContains(value));
         }
-        if (StringUtils.isNotNullNorEmpty(location.titleToMatch())) {
+        if (sus.isNotNullNorEmpty(location.titleToMatch())) {
             result.add(d -> d.getTitle().matches(location.titleToMatch()));
         }
         value = location.urlToBe();
-        if (StringUtils.isNotNullNorEmpty(value)) {
+        if (sus.isNotNullNorEmpty(value)) {
             result.add(ExpectedConditions.urlToBe(value));
         }
         value = location.urlToContain();
-        if (StringUtils.isNotNullNorEmpty(value)) {
+        if (sus.isNotNullNorEmpty(value)) {
             result.add(ExpectedConditions.urlContains(value));
         }
         value = location.urlToMatch();
-        if (StringUtils.isNotNullNorEmpty(value)) {
+        if (sus.isNotNullNorEmpty(value)) {
             result.add(ExpectedConditions.urlMatches(value));
         }
         return result.toArray(new ExpectedCondition[result.size()]);

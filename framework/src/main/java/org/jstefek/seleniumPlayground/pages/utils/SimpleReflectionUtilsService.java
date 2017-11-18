@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Reflection utilities service
  */
-public class SimpleReflectionUtilsService implements ReflectionUtilsService {
+class SimpleReflectionUtilsService implements ReflectionUtilsService {
 
     @Override
     public List<Field> getAllFields(Class klass) {

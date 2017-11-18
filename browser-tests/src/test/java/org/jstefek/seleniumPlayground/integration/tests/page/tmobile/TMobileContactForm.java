@@ -3,10 +3,9 @@ package org.jstefek.seleniumPlayground.integration.tests.page.tmobile;
 import java.io.File;
 import org.jstefek.seleniumPlayground.integration.tests.model.Ticket;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
+import org.jstefek.seleniumPlayground.pages.PageConfiguration;
 import org.jstefek.seleniumPlayground.pages.checker.annotation.PageLocation;
 import org.jstefek.seleniumPlayground.pages.checker.annotation.WaitForVisibilityAfterLoad;
-import org.jstefek.seleniumPlayground.pages.factory.PageFactory;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -35,8 +34,8 @@ public class TMobileContactForm extends AbstractPage {
     @FindBy(className = "portlet-msg-success")
     private WebElement message;
 
-    public TMobileContactForm(WebDriver browser, PageFactory pageFactory) {
-        super(browser, pageFactory);
+    public TMobileContactForm(PageConfiguration config) {
+        super(config);
     }
 
     public TMobileContactForm fillInTicket(Ticket t) {

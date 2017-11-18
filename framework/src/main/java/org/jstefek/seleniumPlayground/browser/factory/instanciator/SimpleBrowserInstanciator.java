@@ -16,11 +16,11 @@ class SimpleBrowserInstanciator implements BrowserInstanciator {
     private final Function<String, String> sysPropToPathFunction;
     private final String sysPropertyName;
 
-    public SimpleBrowserInstanciator(String resourceName, String sysPropertyName, Function<? super MutableCapabilities, ? extends WebDriver> browserFunction, Supplier<? extends MutableCapabilities> capabilitiesSupplier) {
+    SimpleBrowserInstanciator(String resourceName, String sysPropertyName, Function<? super MutableCapabilities, ? extends WebDriver> browserFunction, Supplier<? extends MutableCapabilities> capabilitiesSupplier) {
         this(browserFunction, capabilitiesSupplier, (path) -> new File(path), resourceName, (p) -> System.getProperty(p), sysPropertyName);
     }
 
-    public SimpleBrowserInstanciator(Function<? super MutableCapabilities, ? extends WebDriver> browserFunction, Supplier<? extends MutableCapabilities> capabilitiesSupplier, Function<String, File> pathToFileFunction, String resourceName, Function<String, String> sysPropToPathFunction, String sysPropertyName) {
+    SimpleBrowserInstanciator(Function<? super MutableCapabilities, ? extends WebDriver> browserFunction, Supplier<? extends MutableCapabilities> capabilitiesSupplier, Function<String, File> pathToFileFunction, String resourceName, Function<String, String> sysPropToPathFunction, String sysPropertyName) {
         this.browserFunction = browserFunction;
         this.capabilitiesSupplier = capabilitiesSupplier;
         this.pathToFileFunction = pathToFileFunction;

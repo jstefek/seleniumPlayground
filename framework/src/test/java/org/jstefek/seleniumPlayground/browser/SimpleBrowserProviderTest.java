@@ -14,13 +14,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class FromSystemPropertiesBrowserProviderTest {
+public class SimpleBrowserProviderTest {
 
     private BrowserFactory bf;
     private Supplier<BrowserType> browserTypeSupplier;
     private ChromeDriver chromeDriver;
     private FirefoxDriver firefoxDriver;
-    private FromSystemPropertiesBrowserProvider provider;
+    private SimpleBrowserProvider browserProvider;
 
     @BeforeMethod
     public void setup() {
@@ -28,7 +28,7 @@ public class FromSystemPropertiesBrowserProviderTest {
         firefoxDriver = Mockito.mock(FirefoxDriver.class);
         bf = Mockito.mock(BrowserFactory.class);
         browserTypeSupplier = Mockito.mock(Supplier.class);
-        provider = new FromSystemPropertiesBrowserProvider(bf, browserTypeSupplier);
+        browserProvider = new SimpleBrowserProvider(bf, browserTypeSupplier);
 
         when(bf.startBrowser(BrowserType.FIREFOX)).thenReturn(firefoxDriver);
         when(bf.startBrowser(BrowserType.CHROME)).thenReturn(chromeDriver);
@@ -38,27 +38,27 @@ public class FromSystemPropertiesBrowserProviderTest {
     @Test
     public void testGetBrowser_browserIsSet_browserIsStartedOnlyOnce() {
         when(browserTypeSupplier.get()).thenReturn(BrowserType.FIREFOX);
-        provider.getBrowser();
+        browserProvider.get();
         verify(bf, times(1)).startBrowser(any());
-        provider.getBrowser();
+        browserProvider.get();
         verify(bf, times(1)).startBrowser(any());
     }
 
     @Test
     public void testGetBrowser_chromeIsSet_chromeIsReturned() {
         when(browserTypeSupplier.get()).thenReturn(BrowserType.CHROME);
-        assertTrue(provider.getBrowser() instanceof ChromeDriver);
+        assertTrue(browserProvider.get() instanceof ChromeDriver);
     }
 
     @Test
     public void testGetBrowser_firefoxIsSet_firefoxIsReturned() {
         when(browserTypeSupplier.get()).thenReturn(BrowserType.FIREFOX);
-        assertTrue(provider.getBrowser() instanceof FirefoxDriver);
+        assertTrue(browserProvider.get() instanceof FirefoxDriver);
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testGetBrowser_unknownIsSet_throwsException() {
         when(browserTypeSupplier.get()).thenReturn(BrowserType.UNKNOWN);
-        provider.getBrowser();
+        browserProvider.get();
     }
 }

@@ -1,11 +1,11 @@
 package org.jstefek.seleniumPlayground.integration.tests;
 
-import org.jstefek.seleniumPlayground.browser.BrowserProvider;
-import org.jstefek.seleniumPlayground.browser.FromSystemPropertiesBrowserProvider;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.jstefek.seleniumPlayground.Framework;
 import org.jstefek.seleniumPlayground.integration.tests.listener.StatusToConsolePrinter;
 import org.jstefek.seleniumPlayground.integration.tests.page.google.GoogleSearchPage;
 import org.jstefek.seleniumPlayground.pages.factory.PageFactory;
-import org.jstefek.seleniumPlayground.pages.factory.SimplePageFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -17,22 +17,25 @@ public abstract class AbstractGoogleSearchTest {
     private static final String GOOGLE_CZ = "https://www.google.cz/";
 
     private WebDriver browser;
-    private final BrowserProvider browserProvider = new FromSystemPropertiesBrowserProvider();
-    private final PageFactory pageFactory = new SimplePageFactory();
+    private PageFactory pageFactory;
 
     @AfterSuite
     public void destroyBrowser() {
-        browser.quit();
+        if (browser != null) {
+            browser.quit();
+        }
     }
 
     @BeforeSuite
-    public void initializeBrowser() {
-        browser = browserProvider.getBrowser();
+    public void initialize() {
+        Injector injector = Guice.createInjector(Framework.getModule());
+        browser = injector.getInstance(WebDriver.class);
+        pageFactory = injector.getInstance(PageFactory.class);
     }
 
     protected GoogleSearchPage openGoogleSearchPage() {
         browser.get(GOOGLE_CZ);
-        return pageFactory.initializePage(GoogleSearchPage.class, browser);
+        return pageFactory.initializePage(GoogleSearchPage.class);
     }
 
 }

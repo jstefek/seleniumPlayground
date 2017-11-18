@@ -1,26 +1,23 @@
 package org.jstefek.seleniumPlayground.pages.checker;
 
 import java.util.List;
+import javax.inject.Inject;
 import org.jstefek.seleniumPlayground.pages.AbstractPage;
 import org.jstefek.seleniumPlayground.pages.checker.annotation.WaitForVisibilityAfterLoad;
 import org.jstefek.seleniumPlayground.pages.utils.ReflectionUtilsService;
-import org.jstefek.seleniumPlayground.pages.utils.SimpleReflectionUtilsService;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Checks all page object's fields marked with {@link WaitForVisibilityAfterLoad WaitForVisibilityAfterLoad} to be visible.
  */
-public class VisibilityChecker implements PageChecker {
+class VisibilityChecker implements PageChecker {
 
     private final ReflectionUtilsService reflectionUtilsService;
 
+    @Inject
     VisibilityChecker(ReflectionUtilsService reflectionUtilsService) {
         this.reflectionUtilsService = reflectionUtilsService;
-    }
-
-    public VisibilityChecker() {
-        this(new SimpleReflectionUtilsService());
     }
 
     @Override

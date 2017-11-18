@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import javax.inject.Inject;
 import org.jstefek.seleniumPlayground.config.BaseConfig;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SimpleRequestGuard implements RequestGuard {
+class SimpleRequestGuard implements RequestGuard {
 
     private static final String AJAX_INTERCEPTOR
             = "window.org = window.org || {};\n"
@@ -48,7 +49,8 @@ public class SimpleRequestGuard implements RequestGuard {
 
     private final WebDriver browser;
 
-    public SimpleRequestGuard(WebDriver browser) {
+    @Inject
+    SimpleRequestGuard(WebDriver browser) {
         this.browser = browser;
     }
 
